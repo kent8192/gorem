@@ -1,6 +1,11 @@
 services:
   gorem:
     build:
-        context: .
-        dockerfile: ./Dockerfile
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/gorem
     tty: true
+
+volumes:
+  gorem:
