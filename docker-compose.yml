@@ -1,0 +1,6 @@
+services:
+  gorem:
+    build:
+        context: .
+        dockerfile: ./Dockerfile
+    tty: true
