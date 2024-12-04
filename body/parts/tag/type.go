@@ -1,12 +1,61 @@
 package tag
 
+import "fmt"
+
+// DataTypeInterface
 type DataTypeInterface interface {
 	Refer() string
 }
 
-// DataTypeを保持する構造体
+// DataType構造体
 type DataType struct {
-	dataType DataTypeInterface
+	dataType                  DataTypeInterface
+	isLegitimatelyInitialized bool
+}
+
+// InitTagメソッド
+func (d *DataType) InitTag(value DataTypeInterface) *DataType {
+	d.isLegitimatelyInitialized = true
+	d.dataType = value
+	if err := d.ValidateTag(); err != nil {
+		panic(err)
+	}
+	return d
+}
+
+// RenderTagメソッド
+func (d *DataType) RenderTag() string {
+	if !d.isLegitimatelyInitialized {
+		return ""
+	}
+	return fmt.Sprintf("type:%s", d.dataType.Refer())
+}
+
+// IsValidメソッド
+func (d *DataType) IsValid() (bool, string) {
+	if !d.isLegitimatelyInitialized {
+		return false, "data type is not initialized legitimately"
+	}
+	if d.dataType == nil {
+		return false, "data type interface is nil"
+	}
+	if d.dataType.Refer() == "" {
+		return false, "data type's Refer method returned an empty string"
+	}
+	return true, ""
+}
+
+// ValidateTagメソッド
+func (d *DataType) ValidateTag() error {
+	// エラー内容をIsValidから受け取る
+	if valid, errMessage := d.IsValid(); !valid {
+		return fmt.Errorf("invalid data type: %s", errMessage)
+	}
+	return nil
+}
+
+func (r *DataType) GetIsLegitimatelyInitialized() bool {
+	return r.isLegitimatelyInitialized
 }
 
 // MySQLDataTypeは、GORMのtypeタグで使用するMySQLのデータ型を表す列挙型です。
