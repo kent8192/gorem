@@ -3,20 +3,20 @@ package body
 import "fmt"
 
 type GoremBody struct {
-	isIntegrityChecked bool
+	isLegitimatelyInitialized bool
 }
 
 func Mold() *GoremBody {
 	return &GoremBody{
-		isIntegrityChecked: true,
+		isLegitimatelyInitialized: true,
 	}
 }
 
 func (g *GoremBody) CheckIntegirity() error {
-	if g.isIntegrityChecked {
+	if g.isLegitimatelyInitialized {
 		return nil
 	} else {
-		err := fmt.Errorf("this GolemBody is illegally molded using a forbidden method")
+		err := fmt.Errorf("this GolemBody is illegitimately molded using a forbidden method")
 		return err
 	}
 }
